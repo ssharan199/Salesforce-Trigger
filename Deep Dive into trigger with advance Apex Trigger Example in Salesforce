@@ -1,0 +1,18 @@
+Trigger calculateBalance on Account(after update)
+{
+
+List <Account> accList = [select id,name,Balance__c, (select id,name, IndividualBalance__c from Contacts) from account where Balance__c >0];
+List <Contact> contactList = new List<Contact>();
+for(Account acc: accList)
+{
+ if(acc.Contacts.size() >0){
+   Decimal storeAmount = acc.Balance__c/acc.Contacts.size();
+    for(Contact cc:acc.Contacts)
+    {
+        cc.IndividualBalance__c = storeAmount;
+        contactList.add(cc);
+    }
+   }
+}
+update contactList;
+}
