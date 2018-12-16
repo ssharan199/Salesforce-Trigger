@@ -1,14 +1,12 @@
 //rollup summary
-
-Trigger countContact on Account(after update){
-
+Trigger countContactonAccount on Contact(after insert,after update,after delete, after undelete){
 //1. use query to fetch accounts and associated contacts
-List<Account> acclist = [select id,name, (select id,name from Contacts) from Account];
+List<Account> accList =[select id,name, (select id,name from Contacts) from account];
 //2.iterate over the list
-for(Account acc: acclist)
+for(Account acc: accList)
 {
 //3.store the value of no of contacts into that field
-    acc.Contact_Count__c = acc.Contacts.size();
+    acc.Contact_Count__c=acc.Contacts.size();    
 }
-update acclist;
+update accList;
 }
